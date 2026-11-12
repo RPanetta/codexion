@@ -6,7 +6,7 @@
 #    By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/12 14:53:14 by rpanetta          #+#    #+#              #
-#    Updated: 2026/11/12 17:01:04 by rpanetta         ###   ########.fr        #
+#    Updated: 2026/11/12 17:30:42 by rpanetta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = codexion
 SOURCES = src/main.c\
 src/errors.c\
 src/parse.c\
+src/validate_scheduler.c\
 
 OBJECTS = $(SOURCES:%.c=%.o)
 

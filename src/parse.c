@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/12 16:35:14 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/12 16:54:01 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/12 17:32:08 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	parse_number(const char *text, int *number)
 	while (text[index] != '\0')
 	{
 		if (text[index] < '0' || text[index] > '9')
-			return(1);
+			return (1);
 		digit = text[index] - '0';
 		if (value > (INT_MAX - digit) / 10)
 			return (1);

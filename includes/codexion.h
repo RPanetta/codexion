@@ -6,18 +6,18 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/10 18:17:20 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/12 17:03:26 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/12 17:31:50 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
 
-#include <string.h>
+# include <string.h>
 # include <limits.h>
 # include <stdio.h>
 
-typedef	struct s_config
+typedef struct s_config
 {
 	int			number_of_coders;
 	int			time_to_burnout;
@@ -28,7 +28,6 @@ typedef	struct s_config
 	int			dongle_cooldown;
 	const char	*scheduler;
 }	t_config;
-
 
 int	print_error(char *message);
 int	parse_number(const char *text, int *number);
