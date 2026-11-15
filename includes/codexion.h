@@ -6,13 +6,15 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/10 18:17:20 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/12 17:31:50 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/14 17:27:24 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
 
+# include <unistd.h>
+# include <sys/time.h>
 # include <string.h>
 # include <limits.h>
 # include <stdio.h>
