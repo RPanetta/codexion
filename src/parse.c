@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/12 16:35:14 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/12 17:32:08 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/17 16:16:52 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	parse_number(const char *text, int *number)
 }
 
 //Fills the configuration
-int	parse_confi(char *argv[], t_config *config)
+int	parse_config(char *argv[], t_config *config)
 {
 	if (parse_number(argv[1], &config->number_of_coders)
 		|| parse_number(argv[2], &config->time_to_burnout)

@@ -6,7 +6,7 @@
 #    By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/12 14:53:14 by rpanetta          #+#    #+#              #
-#    Updated: 2026/11/12 17:30:42 by rpanetta         ###   ########.fr        #
+#    Updated: 2026/11/17 16:27:03 by rpanetta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,9 @@ SOURCES = src/main.c\
 src/errors.c\
 src/parse.c\
 src/validate_scheduler.c\
+src/time_utils.c\
+src/init.c\
+src/cleanup.c\
 
 OBJECTS = $(SOURCES:%.c=%.o)
 
