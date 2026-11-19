@@ -6,7 +6,7 @@
 #    By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/12 14:53:14 by rpanetta          #+#    #+#              #
-#    Updated: 2026/11/17 16:27:03 by rpanetta         ###   ########.fr        #
+#    Updated: 2026/11/19 15:51:07 by rpanetta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,12 @@ src/validate_scheduler.c\
 src/time_utils.c\
 src/init.c\
 src/cleanup.c\
+src/state.c\
+src/log.c\
+src/coder.c\
+src/run.c\
+src/heap.c\
+src/heap_utils.c\
 
 OBJECTS = $(SOURCES:%.c=%.o)
 

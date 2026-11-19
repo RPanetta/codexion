@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/10 18:12:36 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/17 16:56:19 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/19 15:57:51 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char *argv[])
 {
-	t_config	config;
+	t_config		config;
 	t_simulation	simulation;
 
 	if (argc != 9)
@@ -28,9 +28,39 @@ int	main(int argc, char *argv[])
 	simulation.config = config;
 	if (init_simulation(&simulation) != 0)
 		return (1);
-	printf("coder 1 id: %d\n", simulation.coders[0].id);
-	printf("coder 1 count: %d\n", simulation.coders[0].compile_count);
-	printf("dongle 1 taken: %d\n", simulation.dongles[0].is_taken);
+	run_simulation(&simulation);
 	destroy_simulation(&simulation);
 	return (0);
 }
+
+//static void push_node(t_heap *heap, long long key, int coder_id)
+//{
+//    t_heap_node node;
+
+//    node.key = key;
+//    node.coder_id = coder_id;
+//    if (heap_push(heap, node) != 0)
+//        printf("push failed: heap is full\n");
+//}
+
+//int main(void)
+//{
+//    t_heap          heap;
+//    t_heap_node     node;
+
+//    if (heap_init(&heap, 5) != 0)
+//        return (1);
+//    push_node(&heap, 50, 2);
+//    push_node(&heap, 20, 4);
+//    push_node(&heap, 50, 0);
+//    push_node(&heap, 10, 1);
+//    push_node(&heap, 30, 3);
+//    push_node(&heap, 99, 9);
+//    while (heap.size > 0)
+//    {
+//        node = heap_pop(&heap);
+//        printf("key = %lld, coder_id = %d\n", node.key, node.coder_id);
+//    }
+//    heap_destroy(&heap);
+//    return (0);
+//}

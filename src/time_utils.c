@@ -35,11 +35,17 @@ long long	get_elapsed_time_ms(long long start_time)
 }
 
 //Wait for a number of milliseconds
-void	sleep_ms(long long duration_ms)
+//On each iteration it checks whether the simulation should stop.
+//If so, it exits immediately with return
+void	sleep_ms(t_simulation *simulation, long long duration_ms)
 {
 	long long	end_time;
 
 	end_time = get_current_time_ms() + duration_ms;
 	while (get_current_time_ms() < end_time)
+	{
+		if (is_simulation_stopped(simulation) == 1)
+			return ;
 		usleep(500);
+	}
 }
