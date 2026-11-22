@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/17 15:11:54 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/17 18:29:48 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/22 13:53:09 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,19 @@ static int	allocate_memory(t_simulation *simulation)
 	int	total;
 
 	total = simulation->config.number_of_coders;
+    simulation->waiting_queue.nodes = NULL;
 	simulation->coders = malloc(sizeof(t_coder) * total);
-	if (simulation->coders == NULL)
-		return (1);
-	simulation->dongles = malloc(sizeof(t_dongle) * total);
-	if (simulation->dongles == NULL)
+    simulation->dongles = malloc(sizeof(t_dongle) * total);
+    simulation->skipped_nodes = malloc(sizeof(t_heap_node) * total);
+	if (simulation->coders == NULL || simulation->dongles == NULL
+        || simulation->skipped_nodes == NULL)
+    {
+        free_memory(simulation);
+        return (1);
+    }
+	if (heap_init(&simulation->waiting_queue, total) != 0)
 	{
-		free(simulation->coders);
+		free_memory(simulation);
 		return (1);
 	}
 	return (0);
@@ -55,6 +61,19 @@ static int	init_global_mutexes(t_simulation *simulation)
 		pthread_mutex_destroy(&simulation->log_mutex);
 		return (1);
 	}
+    if (pthread_mutex_init(&simulation->dongle_mutex, NULL) != 0)
+    {
+        pthread_mutex_destroy(&simulation->stop_mutex);
+        pthread_mutex_destroy(&simulation->log_mutex);
+		return (1);
+    }
+    if (pthread_cond_init(&simulation->dongle_condition, NULL) != 0)
+    {
+        pthread_mutex_destroy(&simulation->dongle_mutex);
+        pthread_mutex_destroy(&simulation->stop_mutex);
+        pthread_mutex_destroy(&simulation->log_mutex);
+        return (1);
+    }
 	return (0);
 }
 
@@ -72,6 +91,7 @@ static int	init_coders(t_simulation *simulation)
 		coder->compile_count = 0;
 		coder->last_compile_start = 0;
 		coder->simulation = simulation;
+        coder->has_dongles = 0;
 		if (pthread_mutex_init(&coder->data_mutex, NULL) != 0)
 		{
 			destroy_coder_mutexes(simulation, index);
@@ -87,6 +107,7 @@ static int	init_coders(t_simulation *simulation)
 //Each failed (if condition) undoes exactly what was done previously
 int	init_simulation(t_simulation *simulation)
 {
+    simulation->next_ticket = 0;
 	simulation->should_stop = 0;
 	if (allocate_memory(simulation) != 0)
 		return (print_error("Memory allocation failed"));

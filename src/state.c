@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/19 11:20:49 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/19 11:33:06 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/22 14:09:51 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,8 @@ int	stop_simulation(t_simulation *simulation)
 		is_first_stop = 1;
 	}
 	pthread_mutex_unlock(&simulation->stop_mutex);
+    pthread_mutex_lock(&simulation->dongle_mutex);
+    pthread_cond_broadcast(&simulation->dongle_condition);
+    pthread_mutex_unlock(&simulation->dongle_mutex);
 	return (is_first_stop);
 }

@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/19 12:39:38 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/19 15:59:57 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/22 15:13:45 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ static void	refactor_phase(t_coder *coder)
 	sleep_ms(coder->simulation, coder->simulation->config.time_to_refactor);
 }
 
+static void *lone_coder_routine(t_coder *coder)
+{
+    print_status(coder->simulation, coder->id, "has taken a dongle");
+    return (NULL);
+}
+
 //the function that each thread executes
 //It takes a void * argument and returns a void *.
 //Cast the argument to t_coder *
@@ -54,9 +60,16 @@ void	*coder_routine(void *argument)
 	t_coder	*coder;
 
 	coder = (t_coder *)argument;
+    if (coder->simulation->config.number_of_coders == 1)
+        return (lone_coder_routine(coder));
 	while (is_simulation_stopped(coder->simulation) == 0)
 	{
+        if (acquire_dongles(coder) == 0)
+            break ;
+        print_status(coder->simulation, coder->id, "has taken a dongle");
+        print_status(coder->simulation, coder->id, "has taken a dongle");
 		compile_phase(coder);
+        release_dongles(coder);
 		debug_phase(coder);
 		refactor_phase(coder);
 	}

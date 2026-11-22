@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/17 15:47:51 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/17 18:30:04 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/22 13:56:35 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	destroy_coder_mutexes(t_simulation *simulation, int count)
 //destroy stop_mutex and log_mutex
 void	destroy_global_mutexes(t_simulation *simulation)
 {
+    pthread_cond_destroy(&simulation->dongle_condition);
+    pthread_mutex_destroy(&simulation->dongle_mutex);
 	pthread_mutex_destroy(&simulation->stop_mutex);
 	pthread_mutex_destroy(&simulation->log_mutex);
 }
@@ -36,6 +38,8 @@ void	destroy_global_mutexes(t_simulation *simulation)
 //free the lists
 void	free_memory(t_simulation *simulation)
 {
+    heap_destroy(&simulation->waiting_queue);
+    free(simulation->skipped_nodes);
 	free(simulation->coders);
 	free(simulation->dongles);
 }
