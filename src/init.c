@@ -6,13 +6,14 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/17 15:11:54 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/22 13:53:09 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/26 16:12:18 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
 //Reserve the lists of coders and dongles
+//total = the number of coders (same to dongles: is one per coder)
 static int	allocate_memory(t_simulation *simulation)
 {
 	int	total;
@@ -52,6 +53,7 @@ static void	init_dongles(t_simulation *simulation)
 }
 
 //Create log_mutex and stop_mutex
+//each failure undoes exactly what was created before
 static int	init_global_mutexes(t_simulation *simulation)
 {
 	if (pthread_mutex_init(&simulation->log_mutex, NULL) != 0)

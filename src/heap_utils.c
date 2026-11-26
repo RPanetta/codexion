@@ -6,12 +6,13 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/19 14:50:32 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/19 15:51:57 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/26 15:48:22 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
+//First, compare by key. Only if the key are equal, compre by coder_id
 //Returns 1 if the first one should come out earlier, 0 otherwise
 int	is_smaller_at(t_heap *heap, int first_index, int second_index)
 {
@@ -56,6 +57,8 @@ void	heap_move_up(t_heap *heap, int index)
 	}
 }
 
+//using after removing the smallest element. The last node
+//moves to the root and must be moved down to its proper position
 void	heap_move_down(t_heap *heap, int index)
 {
 	int	smallest_index;
