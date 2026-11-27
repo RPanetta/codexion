@@ -6,19 +6,22 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/26 16:52:42 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/26 17:21:34 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/27 18:38:06 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
+//returns the priority key for each coder
 static long long	get_request_key(t_coder *coder)
 {
 	t_simulation	*simulation;
 
 	simulation = coder->simulation;
-	if (simulation->config.use_edf == 1)
+	if (strcmp(simulation->config.scheduler, "edf") == 0)
+	{
 		return (coder->last_compile_start + simulation->config.time_to_burnout);
+	}
 	simulation->next_ticket++;
 	return (simulation->next_ticket);
 }
@@ -49,7 +52,16 @@ static void	wait_for_change(t_simulation *simulation)
 	}
 
 }
-
+//- lock dongle_mutex so no other thread can access the dongle or
+//the request queue
+//- create a request with the coder's priority key and ID,
+//set has_dongles = 0, and push the request into the heap
+//- try assigning dongles. The coder may get a pair right away.
+//- while the coder is still waiting for dongles and the simulation
+//is running, wait using wait_for_change. After waking up, try
+//assigning dongles again.
+//- copy has_dongles into got_dongles, then unlock dongle_mutex
+//- return 1 if the coder got the dongles, or 0 if the simulation stopped
 int	acquire_dongles(t_coder *coder)
 {
 	t_simulation	*simulation;
@@ -59,7 +71,7 @@ int	acquire_dongles(t_coder *coder)
 	simulation = coder->simulation;
 	pthread_mutex_lock(&simulation->dongle_mutex);
 	request.key = get_request_key(coder);
-	request.coder_id = coder->id;
+	request.coder_id = coder->id - 1;
 	coder->has_dongles = 0;
 	heap_push(&simulation->waiting_queue, request);
 	assign_and_notify(simulation);
@@ -79,9 +91,11 @@ void	release_dongles(t_coder *coder)
 	t_simulation	*simulation;
 	long long		available_time;
 	int				right_index;
+	int				left_index;
 
 	simulation = coder->simulation;
-	right_index = get_right_dongle_index(simulation, coder->id);
+	left_index = coder->id - 1;
+	right_index = get_right_dongle_index(simulation, left_index);
 	available_time = get_current_time_ms();
 	available_time = available_time + simulation->config.dongle_cooldown;
 	pthread_mutex_lock(&simulation->dongle_mutex);

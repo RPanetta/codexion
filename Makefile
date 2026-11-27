@@ -6,7 +6,7 @@
 #    By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/12 14:53:14 by rpanetta          #+#    #+#              #
-#    Updated: 2026/11/19 15:51:07 by rpanetta         ###   ########.fr        #
+#    Updated: 2026/11/27 17:01:59 by rpanetta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,9 @@ src/coder.c\
 src/run.c\
 src/heap.c\
 src/heap_utils.c\
+src/dongles.c\
+src/dongle_scheduler.c\
+src/dongle_utils.c\
 
 OBJECTS = $(SOURCES:%.c=%.o)
 

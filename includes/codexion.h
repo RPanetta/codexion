@@ -6,13 +6,14 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/10 18:17:20 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/19 15:59:11 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/26 16:09:00 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
 
+# include <time.h>
 # include <stdlib.h>
 # include <pthread.h>
 # include <unistd.h>
@@ -49,18 +50,8 @@ typedef struct s_coder
 	pthread_t		thread;
 	pthread_mutex_t	data_mutex;
 	t_simulation	*simulation;
+	int				has_dongles;
 }	t_coder;
-
-struct s_simulation
-{
-	t_config		config;
-	long long		start_time;
-	int				should_stop;
-	t_coder			*coders;
-	t_dongle		*dongles;
-	pthread_mutex_t	log_mutex;
-	pthread_mutex_t	stop_mutex;
-};
 
 typedef struct s_heap_node
 {
@@ -74,6 +65,22 @@ typedef struct s_heap
 	int			size;
 	int			capacity;
 }	t_heap;
+
+struct s_simulation
+{
+	t_config		config;
+	long long		start_time;
+	int				should_stop;
+	t_coder			*coders;
+	t_dongle		*dongles;
+	pthread_mutex_t	log_mutex;
+	pthread_mutex_t	stop_mutex;
+	long long		next_ticket;
+	t_heap			waiting_queue;
+	t_heap_node		*skipped_nodes;
+	pthread_mutex_t	dongle_mutex;
+	pthread_cond_t	dongle_condition;
+} ;
 
 int			print_error(char *message);
 int			parse_number(const char *text, int *number);
@@ -101,5 +108,12 @@ void		swap_at(t_heap *heap, int first_index, int second_index);
 void		heap_move_up(t_heap *heap, int index);
 void		heap_move_down(t_heap *heap, int index);
 t_heap_node	heap_pop(t_heap *heap);
+int			get_right_dongle_index(t_simulation *simulation, int coder_id);
+int			are_dongles_ready(t_simulation *simulation, int coder_id);
+long long	get_next_cooldown_end(t_simulation *simulation);
+int			pop_ready_coder(t_simulation *simulation, t_heap_node *ready_node);
+int			assign_ready_dongles(t_simulation *simulation);
+int			acquire_dongles(t_coder *coder);
+void		release_dongles(t_coder *coder);
 
 #endif
