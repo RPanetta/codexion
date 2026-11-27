@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/19 12:39:38 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/27 16:54:47 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/27 19:35:32 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	compile_phase(t_coder *coder)
 	pthread_mutex_lock(&coder->data_mutex);
 	coder->last_compile_start = get_current_time_ms();
 	pthread_mutex_unlock(&coder->data_mutex);
-	print_status(simulation, coder->id, "is compiling");
+	print_status(simulation, coder->id + 1, "is compiling");
 	sleep_ms(simulation, simulation->config.time_to_compile);
 	pthread_mutex_lock(&coder->data_mutex);
 	coder->compile_count++;
@@ -33,19 +33,19 @@ static void	compile_phase(t_coder *coder)
 
 static void	debug_phase(t_coder *coder)
 {
-	print_status(coder->simulation, coder->id, "is debugging");
+	print_status(coder->simulation, coder->id + 1, "is debugging");
 	sleep_ms(coder->simulation, coder->simulation->config.time_to_debug);
 }
 
 static void	refactor_phase(t_coder *coder)
 {
-	print_status(coder->simulation, coder->id, "is refactoring");
+	print_status(coder->simulation, coder->id + 1, "is refactoring");
 	sleep_ms(coder->simulation, coder->simulation->config.time_to_refactor);
 }
 
 static void *lone_coder_routine(t_coder *coder)
 {
-	print_status(coder->simulation, coder->id, "has taken a dongle");
+	print_status(coder->simulation, coder->id + 1, "has taken a dongle");
 	return (NULL);
 }
 
@@ -68,8 +68,8 @@ void	*coder_routine(void *argument)
 	{
 		if (acquire_dongles(coder) == 0)
 			break ;
-		print_status(coder->simulation, coder->id, "has taken a dongle");
-		print_status(coder->simulation, coder->id, "has taken a dongle");
+		print_status(coder->simulation, coder->id + 1, "has taken a dongle");
+		print_status(coder->simulation, coder->id + 1, "has taken a dongle");
 		compile_phase(coder);
 		release_dongles(coder);
 		debug_phase(coder);

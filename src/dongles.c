@@ -6,7 +6,7 @@
 /*   By: rpanetta <rpanetta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/26 16:52:42 by rpanetta          #+#    #+#             */
-/*   Updated: 2026/11/27 18:38:06 by rpanetta         ###   ########.fr       */
+/*   Updated: 2026/11/27 19:28:05 by rpanetta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	acquire_dongles(t_coder *coder)
 	simulation = coder->simulation;
 	pthread_mutex_lock(&simulation->dongle_mutex);
 	request.key = get_request_key(coder);
-	request.coder_id = coder->id - 1;
+	request.coder_id = coder->id;
 	coder->has_dongles = 0;
 	heap_push(&simulation->waiting_queue, request);
 	assign_and_notify(simulation);
@@ -79,7 +79,8 @@ int	acquire_dongles(t_coder *coder)
 		&& is_simulation_stopped(simulation) == 0)
 	{
 		wait_for_change(simulation);
-		assign_and_notify(simulation);
+		if (is_simulation_stopped(simulation) == 0)
+			assign_and_notify(simulation);
 	}
 	got_dongles = coder->has_dongles;
 	pthread_mutex_unlock(&simulation->dongle_mutex);
@@ -94,15 +95,16 @@ void	release_dongles(t_coder *coder)
 	int				left_index;
 
 	simulation = coder->simulation;
-	left_index = coder->id - 1;
-	right_index = get_right_dongle_index(simulation, left_index);
+	left_index = coder->id;
+	right_index = get_right_dongle_index(simulation, coder->id);
 	available_time = get_current_time_ms();
 	available_time = available_time + simulation->config.dongle_cooldown;
 	pthread_mutex_lock(&simulation->dongle_mutex);
-	simulation->dongles[coder->id].is_taken = 0;
-	simulation->dongles[coder->id].available_at = available_time;
+	simulation->dongles[left_index].is_taken = 0;
+	simulation->dongles[left_index].available_at = available_time;
 	simulation->dongles[right_index].is_taken = 0;
 	simulation->dongles[right_index].available_at = available_time;
+	coder->has_dongles = 0;
 	assign_ready_dongles(simulation);
 	pthread_cond_broadcast(&simulation->dongle_condition);
 	pthread_mutex_unlock(&simulation->dongle_mutex);

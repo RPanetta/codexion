@@ -12,21 +12,6 @@
 
 #include "codexion.h"
 
-int	get_left_dongle_index(t_simulation *simulation, int coder_id)
-{
-	int	left_index;
-
-	if (coder_id == 0)
-	{
-		left_index = simulation->config.number_of_coders - 1;
-	}
-	else
-	{
-		left_index = coder_id - 1;
-	}
-	return (left_index);
-}
-
 int get_right_dongle_index(t_simulation *simulation, int coder_id)
 {
     return ((coder_id + 1) % simulation->config.number_of_coders);
@@ -54,7 +39,7 @@ int are_dongles_ready(t_simulation *simulation, int coder_id)
     int left_index;
     int right_index;
 
-    left_index = get_left_dongle_index(simulation, coder_id);
+    left_index = coder_id;
     right_index = get_right_dongle_index(simulation, coder_id);
     if (left_index == right_index)
         return (0);
